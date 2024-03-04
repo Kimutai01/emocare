@@ -161,6 +161,9 @@ def detect_face_emotion(request):
         print(f'Detected Emotion: {detected_face_emotion}')
         cv2.imshow('Emotion Detection', frame_with_detected_emotion)
 
+        if time.time() >= end_time:
+            break
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -171,21 +174,32 @@ def detect_face_emotion(request):
     list_emo = detected_face_emotion
     # Get the currently logged-in user
     current_user = request.user
-    detected_face_emotion =str(detected_face_emotion)
+    detected_face_emotion =str(list_emo)
 
     emotion_mapping = {
-        "sad": 1,
-        "neutral": 2,
-        "happy": 3
+        "Sad": 1,
+        "Neutral": 3,
+        "Happy": 4,
+        "No Faces": 0,
+        "Fear":2
     }
 
     numeric_value = emotion_mapping[detected_face_emotion]
-
+    
     save_emotion = Emotion.objects.create(
-        emotion=detected_face_emotion,
+        kid=current_user,
+        face_emotion=''.join(detected_face_emotion),
         probability=str(numeric_value)
     )
     save_emotion.save()
+
+    # current_user = request.user
+    # save_emotion = Emotion.objects.create(
+    #     kid=current_user,
+    #     pose=''.join(new_pose)
+    #             )
+    # save_emotion.save()
+
 
     mails = Profile.objects.all()
     df = read_frame(mails, fieldnames=['email'])
@@ -284,7 +298,8 @@ def detect_pose(request):
 
         # Check if the person is in a standing pose
         standing_pose = is_standing(detected_pose)
-        print(f'Detected Pose: {"Standing" if standing_pose else "Not Standing"}')
+        pose_label = "Standing" if standing_pose else "Not Standing"
+        print(f'Detected Pose: {pose_label}')
 
         cv2.imshow('Pose Estimation', frame_with_detected_pose)
 
@@ -293,38 +308,37 @@ def detect_pose(request):
 
     cap.release()
     cv2.destroyAllWindows()
-    # results = some_results
-    # Assuming detected_pose is a single value, not a list
-    detected_pose = standing_pose
-    print(f'Detected Pose: {detected_pose}')
 
-    # Check if detected_pose is not None
-    if detected_pose is not None:
-        new_pose = str(detected_pose)
+    # Assuming detected_pose is not a boolean but an actual pose label (e.g., "Standing" or "Not Standing")
+    print(f'Detected Pose: {pose_label}')
+
+    # Check if pose_label is not None
+    if pose_label is not None:
+        new_pose = pose_label
+
+        # #Get the currently logged-in user
+        # current_user = request.user
+        # save_emotion = Emotion.objects.create(
+        #     kid=current_user,
+        #     pose=''.join(new_pose)
+        #             )
+        # save_emotion.save()
 
         # Retrieve all instances of the Emotion model
-        # all_pose = Emotion.objects.all()
-        # Get the currently logged-in user
-        current_user = request.user
-        save_emotion = Emotion.objects.create(
-            kid=current_user,
-            pose=''.join(new_pose)
-                    )
-        save_emotion.save()
+        all_pose = Emotion.objects.all()
         # Iterate over the instances and update the pose attribute
-        # for instance in all_pose:
-        #     # Check if the instance's pose attribute is not None
-        #     if instance.pose is not None:
-        #         instance.pose += ', '.join(new_pose)  # Adding new results to the existing ones
-        #         instance.save()
-        #     else:
-        #         # If the pose attribute is None, set it to the new_pose value
-        #         instance.pose = ', '.join(new_pose)
-        #         instance.save()
-
-    
+        for instance in all_pose:
+            # Check if the instance's pose attribute is not None
+            if instance.pose is not None:
+                instance.pose += ''.join(new_pose)  # Adding new results to the existing ones
+                instance.save()
+            else:
+                # If the pose attribute is None, set it to the new_pose value
+                instance.pose = ''.join(new_pose)
+                instance.save()
 
     return redirect('/dashboard/')
+
 
 @login_required
 def email_history(request):
