@@ -172,10 +172,19 @@ def detect_face_emotion(request):
     # Get the currently logged-in user
     current_user = request.user
     detected_face_emotion =str(detected_face_emotion)
-    save_emotion = Emotion.objects.create(
-        kid=current_user,
-        face_emotion=''.join(detected_face_emotion)
-                )
+
+    emotion_mapping = {
+        "sad": 1,
+        "neutral": 2,
+        "happy": 3
+    }
+
+    numeric_value = emotion_mapping[detected_face_emotion]
+
+    save_emotion = Emotions.objects.create(
+        emotion=detected_face_emotion,
+        probability=str(numeric_value)
+    )
     save_emotion.save()
 
     mails = Profile.objects.all()
