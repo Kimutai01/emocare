@@ -286,12 +286,12 @@ def detect_pose(request):
     cv2.destroyAllWindows()
     # results = some_results
     # Assuming detected_pose is a single value, not a list
-    detected_pose = "Standing" if standing_pose else "Not Standing"
+    detected_pose = standing_pose
     print(f'Detected Pose: {detected_pose}')
 
     # Check if detected_pose is not None
     if detected_pose is not None:
-        new_pose = [detected_pose]
+        new_pose = str(detected_pose)
 
         # Retrieve all instances of the Emotion model
         all_pose = Emotion.objects.all()
