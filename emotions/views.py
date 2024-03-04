@@ -181,7 +181,7 @@ def detect_face_emotion(request):
 
     numeric_value = emotion_mapping[detected_face_emotion]
 
-    save_emotion = Emotions.objects.create(
+    save_emotion = Emotion.objects.create(
         emotion=detected_face_emotion,
         probability=str(numeric_value)
     )
