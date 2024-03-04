@@ -294,18 +294,26 @@ def detect_pose(request):
         new_pose = str(detected_pose)
 
         # Retrieve all instances of the Emotion model
-        all_pose = Emotion.objects.all()
-
+        # all_pose = Emotion.objects.all()
+        # Get the currently logged-in user
+        current_user = request.user
+        save_emotion = Emotion.objects.create(
+            kid=current_user,
+            pose=''.join(new_pose)
+                    )
+        save_emotion.save()
         # Iterate over the instances and update the pose attribute
-        for instance in all_pose:
-            # Check if the instance's pose attribute is not None
-            if instance.pose is not None:
-                instance.pose += ', '.join(new_pose)  # Adding new results to the existing ones
-                instance.save()
-            else:
-                # If the pose attribute is None, set it to the new_pose value
-                instance.pose = ', '.join(new_pose)
-                instance.save()
+        # for instance in all_pose:
+        #     # Check if the instance's pose attribute is not None
+        #     if instance.pose is not None:
+        #         instance.pose += ', '.join(new_pose)  # Adding new results to the existing ones
+        #         instance.save()
+        #     else:
+        #         # If the pose attribute is None, set it to the new_pose value
+        #         instance.pose = ', '.join(new_pose)
+        #         instance.save()
+
+    
 
     return redirect('/dashboard/')
 
