@@ -1,0 +1,31 @@
+<!-- webcam_example.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Example</title>
+</head>
+<body>
+    <h1>Webcam Example</h1>
+
+    <video id="webcam" width="640" height="480" autoplay></video>
+
+    <script>
+        // Check if the browser supports getUserMedia
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Access the webcam
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    var video = document.getElementById('webcam');
+                    video.srcObject = stream;
+                })
+                .catch(function (error) {
+                    console.error('Error accessing webcam:', error);
+                });
+        } else {
+            alert('Your browser does not support getUserMedia');
+        }
+    </script>
+</body>
+</html>
