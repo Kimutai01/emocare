@@ -1,0 +1,9 @@
+## pyaudio
+sudo apt-get update
+sudo apt-get install build-essential
+sudo apt-get install portaudio19-dev
+pip install PyAudio
+
+
+sudo apt-get update
+sudo apt-get install libgl1-mesa-glx
