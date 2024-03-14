@@ -4,6 +4,33 @@ sudo apt-get install build-essential
 sudo apt-get install portaudio19-dev
 pip install PyAudio
 
-
+ls
 sudo apt-get update
 sudo apt-get install libgl1-mesa-glx
+
+
+#dlib
+git clone https://github.com/davisking/dlib.git
+
+
+cd dlib
+mkdir build; cd build; cmake ..; cmake --build .
+
+cd ..
+python3 setup.py install
+
+
+#msqlclient
+sudo apt-get install libmysqlclient-dev
+
+pip install mysqlclient
+
+#import sv2
+sudo apt update
+sudo apt install libgl1-mesa-glx
+
+#run on server
+python manage.py runserver 0.0.0.0:8000
+
+#kill terminal
+fuser -k 8000/tcp
