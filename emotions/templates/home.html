@@ -95,9 +95,9 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav><!-- End Nav Menu -->
       {% if user.is_authenticated  %}
-      <a class="btn-getstarted" href={% url 'emotions:dashboard' %}>Get Started</a>
+      <a class="btn-getstarted" href={% url 'emotions:dashboard' %}>Sign In</a>
       {% else %}
-      <a class="btn-getstarted" href={% url 'account_login' %}>Get Started</a>
+      <a class="btn-getstarted" href={% url 'account_login' %}>Sign Up</a>
       {% endif %}
 
     </div>
@@ -112,18 +112,16 @@
   
       <div class="container">
         <div class="row">
-          <div class="col-lg-10">
-            <h2 data-aos="fade-up" data-aos-delay="100">EmoCare</h2>
-            <p data-aos="fade-up" data-aos-delay="200">Revolutionising Childcare with Emotion Recognition Technology</p>
-          </div>
-          <div class="col-lg-5">
-            <form action="" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300">
-              <input type="text" class="form-control" placeholder="Enter email address">
-              <input type="submit" class="btn btn-primary" value="Sign up">
-            </form>
-          </div>
+            <div class="col-lg-10">
+                <h2 data-aos="fade-up" data-aos-delay="100">EmoCare</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Revolutionising Childcare with Emotion Recognition Technology</p>
+            </div>
+            <div class="col-lg-5">
+                <a href={% url "account_login" %} class="btn  btn-lg text-white" style="background-color: #e84545;" data-aos="fade-up" data-aos-delay="300">Get Started</a>
+            </div>
         </div>
-      </div>
+    </div>
+    
     </section><!-- End Hero Section -->
   
 
@@ -555,7 +553,7 @@
                 <div class="swiper-slide">
                   <div class="testimonial-item">
                     <div class="d-flex">
-                      <img src="{% static 'append/img/testimonials/testimonials-1.jpg' %}" class="testimonial-img flex-shrink-0" alt="">
+                      <img src="{% static 'images/testimonial-1.jpg' %}" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>Sarah</h3>
                         <h4>From Londonr</h4>
@@ -578,7 +576,7 @@
                 <div class="swiper-slide">
                   <div class="testimonial-item">
                     <div class="d-flex">
-                      <img src="{% static 'append/img/testimonials/testimonials-2.jpg' %}" class="testimonial-img flex-shrink-0" alt="">
+                      <img src="{% static 'append/img/testimonials/testimonials-1.jpg' %}" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>Mike</h3>
                         <h4>From Manchester</h4>
@@ -641,7 +639,7 @@
                 <div class="swiper-slide">
                   <div class="testimonial-item">
                     <div class="d-flex">
-                      <img src="{% static 'append/img/testimonials/testimonials-5.jpg' %}" class="testimonial-img flex-shrink-0" alt="">
+                      <img src="{% static 'images/testimonial-4.jpg' %}" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>Olivia</h3>
                         <h4>From Cardiff</h4>
@@ -719,7 +717,7 @@
                   <i class="bi bi-clock"></i>
                   <h3>Open Hours</h3>
                   <p>Monday - Friday</p>
-                  <p>9:00AM - 05:00PM</p>
+                  <p>9:00AM - 5:00PM</p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -803,7 +801,6 @@
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
           <h4>Contact Us</h4>
           
-          <p><a href="https://docs.google.com/document/d/your_contact_link">Contact Form</a></p>
           
           <p>Unit 4, Durham Workspace, Abbey Road, Durham DH1 5JZ</p>
           <p>United Kingdom</p>

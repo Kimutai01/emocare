@@ -12,6 +12,7 @@
                 margin: 0;
                 padding: 0;
             }
+         
     
             .ex-2-header {
                 padding-top: 9rem;
@@ -146,6 +147,9 @@
             }
             .navbar-custom {
         background-color:#e84545;
+        body p{
+                color: #000;
+            }
     }</style>
     </head>
 
@@ -170,7 +174,7 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Tivo</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="index.html"><img src="images/logo.svg" alt="alternative"></a> 
+            <a class="navbar-brand logo-image" href="/" >Emocare</a> 
             
             {% block messages %}
             {% if messages %}
@@ -198,34 +202,11 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link page-scroll" href="index.html#header">HOME <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link page-scroll" href="index.html#features">FEATURES</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link page-scroll" href="index.html#details">DETAILS</a>
-                    </li>
-
-                    <!-- Dropdown Menu -->          
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle page-scroll" href="index.html#video" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">VIDEO</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="article-details.html"><span class="item-text">ARTICLE DETAILS</span></a>
-                            <div class="dropdown-items-divide-hr"></div>
-                            <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
-                            <div class="dropdown-items-divide-hr"></div>
-                            <a class="dropdown-item" href="privacy-policy.html"><span class="item-text">PRIVACY POLICY</span></a>
-                        </div>
-                    </li>
-                    <!-- end of dropdown menu -->
-
-                    <li class="nav-item">
-                        <a class="nav-link page-scroll" href="index.html#pricing">PRICING</a>
+                        <a class="nav-link page-scroll" href="/">Home</a>
                     </li>
                 </ul>
                 <span class="nav-item">
-                    <a class="btn-outline-sm" href="log-in.html">SIGNUP</a>
+                    <a class="btn-outline-sm" href="{% url 'account_login' %}" >SignUp</a>
                 </span>
             </div>
         </div> <!-- end of container -->
@@ -238,8 +219,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1>Log In</h1>
-                   <p>You don't have a password? Then please <a class="white" href="sign-up.html">Sign Up</a></p> 
+                    <h1>Sign Up</h1>
+                   <p>You don't have an account? Sign Up below</p> 
                     <!-- Sign Up Form -->
                     <div class="form-container">
                         <form class="row g-3" id="login_form" method="post" action="{% url 'account_signup' %}">
@@ -251,10 +232,7 @@
                               <div class="invalid-feedback">Please enter a valid Email adddress!</div>
                             </div>
         
-                            {% if redirect_field_value %}
-                              <input type="hidden" name="signup" value="{{ redirect_field_value }}" />
-                            {% endif %}
-                            
+                          
                             <div class="col-12">
                               <button class="btn btn-primary w-100" type="submit">SignUp</button>
                             </div>
