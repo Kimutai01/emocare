@@ -145,18 +145,6 @@ def cancel(request):
 
 
 
-camera = cv2.VideoCapture(0)
-
-def generate_frames():
-    while True:
-        success, frame = camera.read()
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @login_required
 def detect_face_emotion(request):
@@ -228,67 +216,77 @@ def detect_face_emotion(request):
 
     return redirect('/dashboard/')
 
+camera = cv2.VideoCapture(0)
+
+1
 @login_required
 def stream_video_feed(request):
     detected_face_emotion = "No Faces"
 
+    def generate_frames():
+    
+        success, frame = camera.read()
+        if success:
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame_bytes = buffer.tobytes()
+            return (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+        
     def generate_frames_with_emotion():
-        start_time = time.time()
-        while True:
-            if time.time() - start_time > 3:
-                break
+            
             success, frame = camera.read()
-            if not success:
-                break
-            else:
+            if success:
+               
+
                 # Apply face emotion detection to the frame
-                frame_with_detected_emotion, _ = face_emotion_detection(frame)
+                frame_with_detected_emotion, detected_face_emotion = face_emotion_detection(frame)
                 ret, buffer = cv2.imencode('.jpg', frame_with_detected_emotion)
-                frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                frame_bytes = buffer.tobytes()
+                yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+                # Get the currently logged-in user
+                current_user = request.user
 
-    response = StreamingHttpResponse(generate_frames_with_emotion(), content_type='multipart/x-mixed-replace; boundary=frame')
+                emotion_mapping = {
+                    "Sad": 1,
+                    "Neutral": 3,
+                    "Happy": 4,
+                    "No Faces": 0,
+                    "Fear": 2
+                }
 
-    # Get the currently logged-in user
-    current_user = request.user
+                numeric_value = emotion_mapping.get(detected_face_emotion, 0)
 
-    emotion_mapping = {
-        "Sad": 1,
-        "Neutral": 3,
-        "Happy": 4,
-        "No Faces": 0,
-        "Fear": 2
-    }
+                # Save detected emotion to the database
+                save_emotion = Emotion.objects.create(
+                    kid=current_user,
+                    face_emotion=detected_face_emotion,
+                    probability=str(numeric_value)
+                )
+                save_emotion.save()
 
-    numeric_value = emotion_mapping.get(detected_face_emotion, 0)
+                # Retrieve email list
+                mail_list = Profile.objects.values_list('email', flat=True)
 
-    # Save detected emotion to the database
-    save_emotion = Emotion.objects.create(
-        kid=current_user,
-        face_emotion=detected_face_emotion,
-        probability=str(numeric_value)
-    )
-    save_emotion.save()
+                # Prepare email content
+                html_content = render_to_string("email.html", {'emotions': detected_face_emotion})
+                body = strip_tags(html_content)
 
-    # Retrieve email list
-    mail_list = Profile.objects.values_list('email', flat=True)
+                # Send email
+                message = EmailMultiAlternatives(
+                    "Emocare",
+                    body,
+                    '',
+                    mail_list,
+                )
+                message.attach_alternative(html_content, "text/html")
+                message.send(fail_silently=False)
 
-    # Prepare email content
-    html_content = render_to_string("email.html", {'emotions': detected_face_emotion})
-    body = strip_tags(html_content)
+                
+    return StreamingHttpResponse(generate_frames_with_emotion(), content_type='multipart/x-mixed-replace; boundary=frame')
 
-    # Send email
-    message = EmailMultiAlternatives(
-        "Emocare",
-        body,
-        '',
-        mail_list,
-    )
-    message.attach_alternative(html_content, "text/html")
-    message.send(fail_silently=False)
-
-    return response
+    
+    # return response
 
 
 
