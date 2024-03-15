@@ -21,5 +21,6 @@ urlpatterns = [
     path('cancel.html/', views.cancel, name='cancel'),
 	path('update_profile/', ProfileUpdateView.as_view(), name='update_profile'),
     path('email_history/', views.email_history, name='email_history'),
+    path('stream_video_feed/', views.stream_video_feed, name='stream_video_feed')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -39,7 +39,11 @@ cd emocare
 pip install -r requirements.txt
 
 #install dlib
+cd ..
+
 git clone https://github.com/davisking/dlib.git
+
+apt install cmake
 
 
 cd dlib
@@ -48,8 +52,10 @@ mkdir build; cd build; cmake ..; cmake --build .
 cd ..
 python3 setup.py install
 
+cd ..
 
 #msqlclient
+sudo apt update
 sudo apt-get install libmysqlclient-dev
 
 pip install mysqlclient
@@ -72,11 +78,18 @@ tmux -V
 
 #open port
 sudo ufw enable
-sudo ufw delete allow port
 sudo ufw status
+sudo ufw delete allow port
+sudo ufw allow 8000
+
+#start tmux session
+tmux new -s emocare
+
+conda activate emocare
+cd emocare
 
 #run on server
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver 8000
 
 
 #kill terminal(optional)

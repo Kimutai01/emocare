@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from . models import Profile, Emotion,Plans,EmailHist
@@ -21,6 +22,8 @@ from speechbrain.pretrained.interfaces import foreign_class
 import soundfile as sf
 from django_pandas.io import read_frame
 import time
+from django.http import StreamingHttpResponse
+
 stripe.api_key = settings.STRIPE_PRIVATE_KEY
 YOUR_DOMAIN = 'http://127.0.0.1:8000'
 
@@ -139,9 +142,24 @@ def cancel(request):
 #         instance.save()
 
 #     return redirect('/dashboard/')
+
+
+
+camera = cv2.VideoCapture(0)
+
+def generate_frames():
+    while True:
+        success, frame = camera.read()
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
 @login_required
 def detect_face_emotion(request):
-    cap = cv2.VideoCapture(0)
     detected_face_emotion = "No Faces"
 
     # Set the duration to run the loop (2 seconds)
@@ -149,7 +167,7 @@ def detect_face_emotion(request):
     end_time = time.time() + duration
 
     while time.time() < end_time:
-        ret, frame = cap.read()
+        ret, frame = camera.read()
 
         # Check if the frame is empty
         if not ret or frame is None:
@@ -159,7 +177,6 @@ def detect_face_emotion(request):
         frame_with_detected_emotion, detected_face_emotion = face_emotion_detection(frame)
 
         print(f'Detected Emotion: {detected_face_emotion}')
-        cv2.imshow('Emotion Detection', frame_with_detected_emotion)
 
         if time.time() >= end_time:
             break
@@ -167,66 +184,113 @@ def detect_face_emotion(request):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.release()
+    # Release the camera resources
+    camera.release()
     cv2.destroyAllWindows()
 
-    # list_emo = ['sad']
-    list_emo = detected_face_emotion
     # Get the currently logged-in user
     current_user = request.user
-    detected_face_emotion =str(list_emo)
 
     emotion_mapping = {
         "Sad": 1,
         "Neutral": 3,
         "Happy": 4,
         "No Faces": 0,
-        "Fear":2
+        "Fear": 2
     }
 
-    numeric_value = emotion_mapping[detected_face_emotion]
-    
+    numeric_value = emotion_mapping.get(detected_face_emotion, 0)
+
+    # Save detected emotion to the database
     save_emotion = Emotion.objects.create(
         kid=current_user,
-        face_emotion=''.join(detected_face_emotion),
+        face_emotion=detected_face_emotion,
         probability=str(numeric_value)
     )
     save_emotion.save()
 
-    # current_user = request.user
-    # save_emotion = Emotion.objects.create(
-    #     kid=current_user,
-    #     pose=''.join(new_pose)
-    #             )
-    # save_emotion.save()
+    # Retrieve email list
+    mail_list = Profile.objects.values_list('email', flat=True)
 
-
-    mails = Profile.objects.all()
-    df = read_frame(mails, fieldnames=['email'])
-    mail_list = df['email'].values.tolist()
-    print(mail_list)
-
-
-    html_content = render_to_string("email.html", {'emotions':list_emo})
+    # Prepare email content
+    html_content = render_to_string("email.html", {'emotions': detected_face_emotion})
     body = strip_tags(html_content)
-    
+
+    # Send email
     message = EmailMultiAlternatives(
-        "Emocare", 
+        "Emocare",
         body,
         '',
         mail_list,
     )
-
-    sent_email = EmailHist.objects.create(
-                title=''.join(list_emo)
-            )
-    sent_email.save()
-
     message.attach_alternative(html_content, "text/html")
-    message.send(fail_silently = False)
-    # message.success(request, 'Newsletter Created Successfully!')
+    message.send(fail_silently=False)
 
     return redirect('/dashboard/')
+
+@login_required
+def stream_video_feed(request):
+    detected_face_emotion = "No Faces"
+
+    def generate_frames_with_emotion():
+        start_time = time.time()
+        while True:
+            if time.time() - start_time > 3:
+                break
+            success, frame = camera.read()
+            if not success:
+                break
+            else:
+                # Apply face emotion detection to the frame
+                frame_with_detected_emotion, _ = face_emotion_detection(frame)
+                ret, buffer = cv2.imencode('.jpg', frame_with_detected_emotion)
+                frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+    response = StreamingHttpResponse(generate_frames_with_emotion(), content_type='multipart/x-mixed-replace; boundary=frame')
+
+    # Get the currently logged-in user
+    current_user = request.user
+
+    emotion_mapping = {
+        "Sad": 1,
+        "Neutral": 3,
+        "Happy": 4,
+        "No Faces": 0,
+        "Fear": 2
+    }
+
+    numeric_value = emotion_mapping.get(detected_face_emotion, 0)
+
+    # Save detected emotion to the database
+    save_emotion = Emotion.objects.create(
+        kid=current_user,
+        face_emotion=detected_face_emotion,
+        probability=str(numeric_value)
+    )
+    save_emotion.save()
+
+    # Retrieve email list
+    mail_list = Profile.objects.values_list('email', flat=True)
+
+    # Prepare email content
+    html_content = render_to_string("email.html", {'emotions': detected_face_emotion})
+    body = strip_tags(html_content)
+
+    # Send email
+    message = EmailMultiAlternatives(
+        "Emocare",
+        body,
+        '',
+        mail_list,
+    )
+    message.attach_alternative(html_content, "text/html")
+    message.send(fail_silently=False)
+
+    return response
+
+
 
 @login_required
 def detect_voice(request):
