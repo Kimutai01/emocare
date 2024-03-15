@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from . models import Profile, Emotion,Plans,EmailHist
 import stripe
 from django.conf import settings
@@ -283,11 +284,7 @@ def stream_video_feed(request):
                 message.send(fail_silently=False)
 
                 
-    return StreamingHttpResponse(generate_frames_with_emotion(), content_type='multipart/x-mixed-replace; boundary=frame')
-
-    
-    # return response
-
+    return StreamingHttpResponse(generate_frames_with_emotion(), content_type='multipart/x-mixed-replace; boundary=frame') 
 
 
 @login_required
@@ -432,3 +429,7 @@ def email_history(request):
     emails = EmailHist.objects.all()
     
     return render(request, 'email_history.html', {'emails':emails})
+
+def custom_logout(request):
+    logout(request)
+    return redirect('/')
