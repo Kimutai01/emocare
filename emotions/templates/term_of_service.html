@@ -1,0 +1,346 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Home </title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'append/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'append/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'append/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'append/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'append/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'append/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'append/vendor/aos/aos.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'append/css/main.css' %}" rel="stylesheet">
+
+  <style>
+   #hero {
+            position: relative;
+            overflow: hidden; /* Ensures the video doesn't overflow the container */
+        }
+
+        #background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the video covers the entire container */
+        }
+
+        #text-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white; /* Customize text color */
+            text-align: center;
+            font-size: 24px; /* Adjust font size as needed */
+        }
+             /* Add a new CSS class for responsive behavior */
+             @media (max-width: 768px) {
+            .faq-item {
+                display: none;
+            }
+
+            .faq-item.faq-active {
+                display: block;
+            }
+        }
+        .tos {
+    text-align: left; /* Center-align text */
+    margin-top: 50px; /* Add margin from the top */
+    width: 50%; /* Set width */
+    margin-left: auto; /* Center content horizontally */
+    margin-right: auto; /* Center content horizontally */
+}
+
+
+  </style>
+</head>
+
+<body class="index-page" data-bs-spy="scroll" data-bs-target="#navmenu">
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="{% static 'append/img/logo.png' %}" alt=""> -->
+        <h1>EmoCare</h1>
+        <span>.</span>
+      </a>
+
+      <!-- Nav Menu -->
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+          
+        </ul>
+
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav><!-- End Nav Menu -->
+      {% if user.is_authenticated  %}
+      <a class="btn-getstarted" href={% url 'emotions:dashboard' %}>Sign In</a>
+      {% else %}
+      <a class="btn-getstarted" href={% url 'account_login' %}>Sign Up</a>
+      {% endif %}
+
+    </div>
+  </header><!-- End Header -->
+  <main id="main">
+    
+  
+
+ 
+    <!-- About Section - Home Page -->
+    <section id="about" class="about">
+        <div class="tos" >
+
+            <h2> Terms of website use</h2>
+            <p>
+                These terms of use (together with the documents referred to in it) tell you the terms of use on which you may make use of the 
+                EmoCare website www.EmoCare.co.uk (our Website), whether as a guest or a registered user. Use of our Website includes accessing, 
+                browsing, or registering to use our Website.  
+            </p>
+            <p>
+                Please read these terms of use carefully before you start to use our Website, as these will apply to your use of our Website. In particular, please read the Limitation of Liability section below. You may print a copy of these terms for future reference.  
+            </p>
+            <p>
+                By using our Website, you confirm that you accept these terms of use and that you agree to comply with them. If you do not agree to these terms of use, you must not use our Website.
+ 
+            </p>
+            <h2> Other applicable terms</h2>
+            <p>
+                These terms of use refer to the following additional terms, which also apply to your use of our Website:
+
+            </p>
+            <ul>Our Privacy Notice, which sets out the terms on which we process any personal data we collect from you or that you provide to us via our Website. By using our Website, you consent to such processing and warrant that all data you provide is accurate.
+            </ul>
+            <ul>Our Acceptable Use Notice, which sets out the permitted uses and prohibited uses of our Website. When using our Website, you must comply with this Acceptable Use Notice.
+            </ul>
+            <ul>Our Cookie Policy, which sets out information about the cookies on our Website.
+            </ul>
+
+            <p>If you purchase or subscribe to products or services from EmoCare, separate terms and conditions will apply to those products or services.
+            </p>
+
+            <h2> Information about us</h2>
+            <p>www.EmoCare.co.uk is a Website operated by EmoCare  Limited ("we"). </p>
+            <p>
+                We are registered in England and Wales under company number 15398624 and have our registered office at 4 Durham Workspace, Abbey Road, Pity Me, Durham DH1 5JZ. 
+            </p>
+            <h2>Our website and terms of use
+            </h2>
+            <p>We may change or update the content or services found on our Website at any time without notice. While we do make reasonable efforts to keep our Website up to date, we are under no obligation to update it, and make no representations that the Website is accurate, complete, up-to-date or free from errors. Consequently, we may also update these terms of use, so please check this page regularly as these terms govern your use and are binding on you. These terms were last updated on 18th December 2023.
+            </p>
+            <h2>Accessing our website
+            </h2>
+            <p>Our Website is made available free of charge. We do not guarantee that our Website, or any content on it, will always be available or be uninterrupted. Access to our Website is permitted on a temporary basis. We may suspend, withdraw, discontinue or change all or any part of our Website without notice. We will not be liable to you if for any reason our Website is unavailable at any time or for any period. You are responsible for ensuring that all persons who access our Website through your internet connection are aware of these terms of use and other applicable terms and conditions and that they comply with them.
+            </p>
+            <h2>Your account and password
+            </h2>
+            <p>If you choose, or you are provided with, a user identification code, password or any other piece of information as part of our security procedures, you must treat such information as confidential. You must not disclose it to any third-party. If you know or suspect that anyone other than you knows your user identification code or password, you must promptly notify us at support@EmoCare.co.uk.
+                We have the right to disable any user identification code or password, whether chosen by you or allocated by us, at any time, if in our reasonable opinion, you have failed to comply with any of the provisions of these terms of use.
+                </p>
+
+            <h2>Intellectual property rights
+            </h2>
+            <p>We are the owner or the licensee of all intellectual property rights in our Website, and in the material published on it. Those works are protected by copyright laws and treaties around the world. All such rights are reserved.
+                You may print off one copy and may download extracts of any page(s) from our Website for your personal use and you may draw the attention of others within your organisation to content posted on our Website.
+                You must not modify the paper or digital copies of any materials you have printed off or downloaded in any way, and you must not use any illustrations, photographs, video or audio sequences or any graphics separately from any accompanying text. Our status (and that of any identified contributors) as the authors of content on our Website must always be acknowledged.
+                You must not use any part of the content on our Website for commercial purposes without obtaining a licence to do so from us.
+                If you print off, copy or download any part of our Website in breach of these terms of use, your right to use our Website will cease immediately and you must, at our option, return or destroy any copies of the materials you have made.
+                </p>
+
+            <h2>No reliance on information
+            </h2>
+            <p>The content on our Website is provided for general information only. It is not intended to amount to advice on which you should rely. You must obtain professional or specialist advice before taking, or refraining from, any action on the basis of the content on our Website.
+            </p>
+            <h2>Limitation of our liability
+            </h2>
+
+            <p>Nothing in these terms of use excludes or limits our liability for death or personal injury arising from our negligence, or our fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or limited by English law.
+                We shall not be liable for any loss or damage whatsoever and howsoever arising as a result of your use of or reliance on the information contained on our Website to the maximum extent permitted by law.
+                If you are a business user, please note that in particular, we will not be liable for:
+                </p>
+            <ul>loss of profits, sales, business, or revenue;
+            </ul>
+            <ul>business interruption;
+            </ul>
+            <ul>loss of anticipated savings; </ul>
+            <ul>loss of business opportunity, goodwill or reputation; or </UL>
+               <ul> any indirect or consequential loss or damage.
+                </ul>
+
+            <p>If you are a consumer user, please note that we only provide our Website for domestic and private use. You agree not to use our Website for any commercial or business purposes, and we have no liability to you for any loss of profit, loss of business, business interruption, or loss of business opportunity.
+            </p>
+            <p>We will not be liable for any loss or damage caused by a virus, distributed denial-of-service attack, or other technologically harmful material that may infect your computer equipment, computer programs, data or other proprietary material due to your use of our Website or to your downloading of any content on it, or on any website linked to it.
+            </p>
+            <p>We assume no responsibility for the content of websites linked on our Website; these links are provided for your information only. Such links should not be interpreted as an endorsement by us of those linked websites. It is your responsibility to read and follow the terms and conditions of any third-party website. We will not be liable for any loss or damage that may arise from your use of them.
+            </p>
+            <p>Different limitations and exclusions of liability will apply to liability arising as a result of the supply of any product or service (e.g. finance) that we provide to you, which will be set out in separate terms (e.g. a credit agreement) that we enter with you.
+            </p>
+
+            <h2>Uploading content to our website
+            </h2>
+            <p>Whenever you make use of a feature that allows you to upload content to our Website, or to make contact with other users of our Website, you must comply with the content standards set out in our Acceptable Use Notice.
+            </p>
+            <p>You warrant that any such contribution does comply with those standards, and you will be liable to us and indemnify us for any breach of that warranty. If you are a consumer user, this means you will be responsible for any loss or damage we suffer as a result of your breach of warranty.
+            </p>
+            <p>Any content you upload to our Website will be considered non-confidential and non-proprietary. You retain all of your ownership rights in your content, but you are required to grant us and other users of our Website a limited licence to use, store and copy that content and to distribute and make it available to third parties. The rights you licence to us are described in the next section (Rights you licence).
+            </p>
+            <p>We also have the right to disclose your identity to any third-party who is claiming that any content posted or uploaded by you to our Website constitutes a violation of their intellectual property rights, or of their right to privacy.
+            </p>
+            <p>We will not be responsible, or liable to any third-party, for the content or accuracy of any content posted by you or any other user of our Website.
+            </p>
+            <p>We have the right to remove any posting you make on our Website if, in our opinion, your post does not comply with the content standards set out in our Acceptable Use Notice.
+            </p>
+            <p>The views expressed by other users on our Website do not represent our views or values.
+            </p>
+            <h2>Rights you licence
+            </h2>
+            <p>When you upload or post content to our Website, you grant the following licences:
+            </p>
+            <ul>to us, a perpetual, worldwide, non-exclusive, royalty-free, transferable licence to use, reproduce, distribute, prepare derivative works of, display, and perform that user-generated content in connection with the service provided by the website and across different media (including without limitation to promote our Website or service);
+            </ul>
+            <ul>to other users of our Website or to third parties, a licence to use the content for their purposes or in accordance with the functionality of our Website.
+            </ul>
+            <h2>Viruses</h2>
+            <p>We do not guarantee that our Website will be secure or free from bugs or viruses. You are responsible for configuring your information technology, computer programmes and platform in order to access our Website. You should use your own virus protection software.</p>
+
+            <p>You must not misuse our Website by knowingly introducing viruses, trojans, worms, logic bombs or other material which is malicious or technologically harmful. You must not attempt to gain unauthorised access to our Website, the server on which our Website is stored or any server, computer or database connected to our Website. You must not attack our Website via a denial-of-service attack or a distributed denial-of-service attack. By breaching this provision, you would commit a criminal offence under the Computer Misuse Act 1990. We will report any such breach to the relevant law enforcement authorities and we will cooperate with those authorities by disclosing your identity to them. In the event of such a breach, your right to use our Website will cease immediately.
+            </p>
+            <h2>Linking to our website
+            </h2>You must not establish a link to our Website on any website that is not owned by you. Our Website must not be framed on any other website, nor may you create a link to any part of our Website other than the homepage. We reserve the right to withdraw linking permission without notice.
+
+            <p>If you wish to link to our home page, you must gain prior written consent from Us before creating the link, and provided that you do so in the manner outlined below. You may only link to our home page, provided you do so in a way that is fair and legal and does not damage our reputation or take advantage of it. You must not establish a link in such a way as to suggest any form of association, approval or endorsement on our part where none exists.
+            </p>
+            <p>You must not establish a link to our Website on any website that is not owned by you. Our Website must not be framed on any other website, nor may you create a link to any part of our Website other than the homepage. We reserve the right to withdraw linking permission without notice.
+            </p>
+
+            <p>The website to which you are linking must comply in all respects with the content standards set out in our Acceptable Use Notice. If you wish to make any use of the content on our Website other than that set out above, support@EmoCare.co.uk.
+            </p>
+            <h2>Applicable law</h2>
+            <p>If you are a consumer, please note that these terms of use, its subject matter and their formation are governed by English law. You and we both agree that the courts of England and Wales will have non-exclusive jurisdiction. However, if you are a resident of Northern Ireland, you may also bring proceedings in Northern Ireland. If you are a resident of Scotland, you may also bring proceedings in Scotland.</p>
+            <p>Thank you for visiting our Website.
+            </p>
+        </div>
+
+        
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row align-items-xl-center gy-5">
+
+          <div class="col-xl-5 content">
+          </div>
+
+         
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- End About Section -->
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-5 col-md-12 footer-about">
+          
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="/tos"> Terms and Conditions</a></li>
+            <li><a href="/privacy">Privacy Notice</a></li>
+            <li><a href="/aun">Acceptable Use Notice</a></li>
+            <li><a href="/cookie">Cookies Policy</a></li>
+            <li><a href="/accessibility">Accessibility</a></li>
+            </ul>
+        </div>
+
+        
+
+        <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+          <h4>Contact Us</h4>
+          
+          
+          <p>Unit 4, Durham Workspace, Abbey Road, Durham DH1 5JZ</p>
+          <p>United Kingdom</p>
+          <p class="mt-4"><strong>Phone:</strong> <span>0044(0)3331886566</span></p>
+          <p><strong>Email:</strong> <span>hello@EmoCare.co.uk</span></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>&copy; <span>Copyright</span> <strong class="px-1">Append</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+
+  <!-- Scroll Top Button -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'append/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'append/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'append/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'append/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'append/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'append/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'append/vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'append/js/main.js' %}"></script>
+
+</body>
+
+</html>
+{% endblock %}

@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.shortcuts import reverse
 from PIL import Image
 from django.utils.text import slugify
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -30,11 +31,22 @@ class Emotion(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # Record capture time
     face_emotion = models.CharField(max_length=30, null=True)
     voice_emotions = models.CharField(max_length=30, null=True)
-    pose = models.CharField(max_length=30, null=True)
     probability = models.IntegerField(null=True, blank=True, default=2)
 
     def __str__(self):
         return f'{self.face_emotion} {self.probability}'
+
+class Pose(models.Model):
+    kid = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)  # Record capture time
+    pose = models.CharField(max_length=30, null=True)
+    pose_data = models.TextField()  # Store pose data as JSON or any other suitable format
+    probability = models.IntegerField(null=True, blank=True, default=2)
+
+
+    def __str__(self):
+        return f'{self.kid.username} {self.timestamp}'
+    
 
 class Plans(models.Model):
     plan_name = models.CharField(max_length=100, null=True)
@@ -75,6 +87,7 @@ class PaymentHistory(models.Model):
 class EmailHist(models.Model):
      timestamp = models.DateTimeField(auto_now_add=True)
      title = models.CharField(max_length=100, null=True)
+
 
      def __str__(self):
          return self.title

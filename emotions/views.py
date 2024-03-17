@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from . models import Profile, Emotion,Plans,EmailHist
+from . models import Profile, Emotion,Plans,EmailHist,Pose
 import stripe
 from django.conf import settings
 from django.http import JsonResponse,HttpResponse,request
@@ -23,6 +23,7 @@ from speechbrain.pretrained.interfaces import foreign_class
 import soundfile as sf
 from django_pandas.io import read_frame
 import time
+from django.utils import timezone
 from django.http import StreamingHttpResponse
 
 stripe.api_key = settings.STRIPE_PRIVATE_KEY
@@ -31,6 +32,20 @@ YOUR_DOMAIN = 'http://127.0.0.1:8000'
 def Home(request):
     return render(request, 'home.html')
 
+def tos(request):
+    return render(request, 'term_of_service.html')
+
+def privacy(request):
+    return render(request, 'Privacy_Notice.html')
+
+
+def Acceptable_Use_Notice(request):
+    return render(request, 'Acceptable_Use_Notice.html')
+
+def cookie(request):
+    return render(request, 'CookiesPolicy.html')
+def Accessibility(request):
+    return render(request, 'Accessibility.html')
 @csrf_exempt
 def create_checkout_session(request):
     # plan = Plans.objects.get()
@@ -150,7 +165,7 @@ def cancel(request):
 @login_required
 def detect_face_emotion(request):
     detected_face_emotion = "No Faces"
-
+    camera =cv2.VideoCapture(0)
     # Set the duration to run the loop (2 seconds)
     duration = 2
     end_time = time.time() + duration
@@ -217,12 +232,12 @@ def detect_face_emotion(request):
 
     return redirect('/dashboard/')
 
-camera = cv2.VideoCapture(0)
 
-1
+
 @login_required
 def stream_video_feed(request):
     detected_face_emotion = "No Faces"
+    camera = cv2.VideoCapture(0)    
 
     def generate_frames():
     
@@ -266,8 +281,19 @@ def stream_video_feed(request):
                 )
                 save_emotion.save()
 
+                ## Save detected emotion to the database
+                save_emotion = EmailHist.objects.create(
+                    timestamp=timezone.now(),
+                    title=detected_face_emotion,
+                )
+                save_emotion.save()
+
+
                 # Retrieve email list
-                mail_list = Profile.objects.values_list('email', flat=True)
+                # mail_list = Profile.objects.values_list('email', flat=True)
+
+                user_email = current_user.email
+                # print(user_email)
 
                 # Prepare email content
                 html_content = render_to_string("email.html", {'emotions': detected_face_emotion})
@@ -278,7 +304,7 @@ def stream_video_feed(request):
                     "Emocare",
                     body,
                     '',
-                    mail_list,
+                    [user_email],
                 )
                 message.attach_alternative(html_content, "text/html")
                 message.send(fail_silently=False)
@@ -340,11 +366,11 @@ def detect_voice(request):
 
 @login_required
 def detect_pose(request):
-    
     cap = cv2.VideoCapture(0)
-
+    
+    pose_label = None
     # Set the duration to run the loop (2 seconds)
-    duration = 2
+    duration = 10
     end_time = time.time() + duration
 
     while time.time() < end_time:
@@ -358,7 +384,7 @@ def detect_pose(request):
         # Check if the person is in a standing pose
         standing_pose = is_standing(detected_pose)
         pose_label = "Standing" if standing_pose else "Not Standing"
-        print(f'Detected Pose: {pose_label}')
+        # print(f'Detected Pose: {pose_label}')
 
         cv2.imshow('Pose Estimation', frame_with_detected_pose)
 
@@ -398,20 +424,82 @@ def detect_pose(request):
 
     return redirect('/dashboard/')
 
+#######################################################
+#########################pose #######################
+#####################################################
+@login_required
+def stream_pose_video_feed(request):
+    camera = cv2.VideoCapture(0)
+    
+    def generate_frames():
+        while True:
+            success, frame = camera.read()
+            if success:
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame_bytes = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+            else:
+                camera.release()
+                break
+    def generate_frames_with_pose():
+        success, frame = camera.read()
+        if success:
+            frame_with_detected_pose, detected_pose = pose_estimation(frame)
+            ret, buffer = cv2.imencode('.jpg', frame_with_detected_pose)
+            frame_bytes = buffer.tobytes()
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+             # Check if the person is in a standing pose
+        standing_pose = is_standing(detected_pose)
+        print(f'Detected Pose: {standing_pose}')
+        pose_label = "Standing" if standing_pose else "Not Standing"
+        print(f'Detected Pose: {pose_label}')
+
+           # Check if pose_label is not None
+        if pose_label is not None:
+            new_pose = pose_label
+
+            pose_mapping = {
+                    "Standing": 1,
+                    "Not standing": 0,
+                  
+                }
+            numeric_value = pose_mapping.get(new_pose, 0)
+
+            #Get the currently logged-in user
+            current_user = request.user
+            save_emotion = Pose.objects.create(
+                kid=current_user,
+                pose=''.join(new_pose),
+                probability=str(numeric_value)
+
+                        )
+            save_emotion.save()
+
+
+
+    return StreamingHttpResponse(generate_frames_with_pose(), content_type='multipart/x-mixed-replace; boundary=frame')
 
 @login_required
 def email_history(request):
     
     return render(request, 'email_history.html')
 
+
 @login_required
 def Dash(request):
-    latest_emotions = Emotion.objects.first()
-    all = Emotion.objects.all()
+    latest_emotions = Emotion.objects.last()
+    all_emotions = Emotion.objects.all()
+
+    latest_pose = Pose.objects.last()
+    all_poses = Pose.objects.all()
 
     context = {
-        'latest_emotions' : latest_emotions,
-        'all':all,
+        'latest_emotions': latest_emotions,
+        'all_emotions': all_emotions,
+        'latest_pose': latest_pose,
+        'all_poses': all_poses,
     }
     return render(request, 'dash/index.html', context)
 

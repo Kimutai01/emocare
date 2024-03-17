@@ -75,7 +75,7 @@
 <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-icon rotate-n-0">
             <i class="fas fa-home"></i>
         </div>
@@ -243,9 +243,9 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 {% if latest_emotions %}
-                                                <div class="col-auto">
+                                                <diface_emotionv class="col-auto">
                                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ latest_emotions.face_emotion }}</div>
-                                                </div>
+                                                </diface_emotionv>
                                                 {% else %}
                                                 <div class="col-auto">
                                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">No Recent Emotion</div>
@@ -266,7 +266,7 @@
                             </div>
                         </div>
                         <!-- Earnings (Voice) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -284,7 +284,6 @@
                                                 </div>
                                                 {% endif %}
                                                 <div class="col-auto">
-                                                    <!-- <a href="{% url 'emotions:detect_voice' %}" class=" btn btn-sm btn-success shadow-sm"> -->
                                                         <a href="/dashboard" class=" btn btn-sm btn-success shadow-sm">
                                                         <i
                                                         class=" text-white-50"></i> Detect Voice
@@ -298,7 +297,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- Earnings (Pose) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
@@ -308,9 +307,9 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Current Pose
                                             </div>
                                             <div class="row no-gutters align-items-center">
-                                                {% if latest_emotions %}
+                                                {% if latest_pose %}
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ latest_emotions.pose }}</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ latest_pose.pose }}</div>
                                                 </div>
                                                 {% else %}
                                                 <div class="col-auto">
@@ -318,7 +317,7 @@
                                                 </div>
                                                 {% endif %}
                                                 <div class="col-auto">
-                                                    <a href="{% url 'emotions:detect_pose' %}" class=" btn btn-sm btn-success shadow-sm"><i
+                                                    <a href="{% url 'emotions:stream_pose_video_feed' %}" class=" btn btn-sm btn-success shadow-sm"><i
                                                         class=" text-white-50"></i> Detect Pose
                                                     </a>
                                                 </div>
@@ -344,7 +343,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-success">Level Of Emotions</h6>
+                                    <h6 class="m-0 font-weight-bold text-success">Emotions Period</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -375,7 +374,7 @@
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-success">Level Of Emotions</h6>
+                                    <h6 class="m-0 font-weight-bold text-success">Emotions</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -412,6 +411,36 @@
                         </div>
                     </div>
 
+                    <!-- Area Chart -->
+<div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-success">Pose trend</h6>
+            <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                    aria-labelledby="dropdownMenuLink">
+                    <div class="dropdown-header">Dropdown Header:</div>
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <div class="chart-area">
+                <canvas id="myAreaChart1"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
                   <!-- Content Row -->
 <div class="row">
 
@@ -544,6 +573,7 @@
         s[1] = s[1] || '';
         s[1] += new Array(prec - s[1].length + 1).join('0');
     }
+    
     return s.join(dec);
     }
 
@@ -552,7 +582,7 @@
     var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: [{% for i in all %}'{{i.face_emotion}}',{% endfor %}],
+        labels: [{% for i in all_emotions %}'{{i.face_emotion}}',{% endfor %}],
         datasets: [{
         label: "Earnings",
         lineTension: 0.3,
@@ -566,7 +596,7 @@
         pointHoverBorderColor: "rgba(78, 115, 223, 1)",
         pointHitRadius: 10,
         pointBorderWidth: 2,
-        data: [{% for i in all %}{{i.probability}},{% endfor %}],
+        data: [{% for i in all_emotions %}{{i.probability}},{% endfor %}],
         }],
     },
     options: {
@@ -636,7 +666,126 @@
         }
     }
     });
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
 
+    function number_format(number, decimals, dec_point, thousands_sep) {
+    // *     example: number_format(1234.56, 2, ',', ' ');
+    // *     return: '1 234,56'
+    number = (number + '').replace(',', '').replace(' ', '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function(n, prec) {
+        var k = Math.pow(10, prec);
+        return '' + Math.round(n * k) / k;
+        };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    
+    return s.join(dec);
+    }
+
+    // Area Chart Example
+    var ctx = document.getElementById("myAreaChart1");
+    var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [{% for i in all_poses %}'{{i.pose}}',{% endfor %}],
+        datasets: [{
+        label: "Earnings",
+        lineTension: 0.3,
+        backgroundColor: "rgba(78, 115, 223, 0.05)",
+        borderColor: "rgba(78, 115, 223, 1)",
+        pointRadius: 3,
+        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+        pointBorderColor: "rgba(78, 115, 223, 1)",
+        pointHoverRadius: 3,
+        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+        pointHitRadius: 10,
+        pointBorderWidth: 2,
+        data: [{% for i in all_poses %}{{i.probability}},{% endfor %}],
+        }],
+    },
+    options: {
+        maintainAspectRatio: false,
+        layout: {
+        padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+        }
+        },
+        scales: {
+        xAxes: [{
+            time: {
+            unit: 'date'
+            },
+            gridLines: {
+            display: false,
+            drawBorder: false
+            },
+            ticks: {
+            maxTicksLimit: 7
+            }
+        }],
+        yAxes: [{
+            ticks: {
+            maxTicksLimit: 5,
+            padding: 10,
+            // Include a dollar sign in the ticks
+            callback: function(value, index, values) {
+                return number_format(value);
+            }
+            },
+            gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+            }
+        }],
+        },
+        legend: {
+        display: false
+        },
+        tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        titleMarginBottom: 10,
+        titleFontColor: '#6e707e',
+        titleFontSize: 14,
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        intersect: false,
+        mode: 'index',
+        caretPadding: 10,
+        callbacks: {
+            label: function(tooltipItem, chart) {
+            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            
+            }
+        }
+        }
+    }
+    });
+    
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
@@ -646,9 +795,9 @@
         var myPieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: [{% for i in all %}'{{i.face_emotion}}',{% endfor %}],
+            labels: [{% for i in all_emotions %}'{{i.face_emotion}}',{% endfor %}],
             datasets: [{
-            data: [{% for i in all %}{{i.probability}},{% endfor %}],
+            data: [{% for i in all_emotions %}{{i.probability}},{% endfor %}],
             backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
             hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
             hoverBorderColor: "rgba(234, 236, 244, 1)",

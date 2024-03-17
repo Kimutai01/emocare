@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Home - Append Bootstrap Template</title>
+  <title>Emocare</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -117,7 +117,13 @@
                 <p data-aos="fade-up" data-aos-delay="200">Revolutionising Childcare with Emotion Recognition Technology</p>
             </div>
             <div class="col-lg-5">
-                <a href={% url "account_login" %} class="btn  btn-lg text-white" style="background-color: #e84545;" data-aos="fade-up" data-aos-delay="300">Get Started</a>
+      {% if user.is_authenticated  %}
+
+                <a href={% url "emotions:dashboard" %} class="btn  btn-lg text-white" style="background-color: #e84545;" data-aos="fade-up" data-aos-delay="300">Get Started</a>
+      {% else %}
+      <a href={% url "account_login" %} class="btn  btn-lg text-white" style="background-color: #e84545;" data-aos="fade-up" data-aos-delay="300">Sign In</a>
+      {% endif %}
+
             </div>
         </div>
     </div>
@@ -312,7 +318,7 @@
         <div class="service-item d-flex">
           <div class="icon flex-shrink-0"><i class="bi bi-calendar4-week"></i></div>
           <div>
-            <h4 class="title"><a href={% url 'account_login' %} class="stretched-link">API Integration</a></h4>
+            <h4 class="title"><a href="{% url 'account_login' %}" class="stretched-link">API Integration</a></h4>
             <p class="description">EmoCare offers API integration, allowing for seamless connection with other childcare and educational tools, enhancing the ecosystem of child support services.</p>
           </div>
         </div>
@@ -372,7 +378,7 @@
                 <li><i class="bi bi-check"></i> <span>Daily Emotional Summary</span></li>
                 <li><i class="bi bi-check"></i> <span>EmoCare Tips</span></li>
               </ul>
-              <div class="text-center"><a  href={% url 'account_login' %} class="buy-btn">Buy Now</a></div>
+              <div class="text-center"><a  href="{% url 'account_signup' %}" class="buy-btn">Buy Now</a></div>
             </div>
           </div><!-- End Pricing Item -->
 
@@ -391,7 +397,7 @@
                 <li><i class="bi bi-check"></i> <span>Custom Response Suggestions</span></li>
                 <li><i class="bi bi-check"></i> <span>Access to Expert Articles and Webinars</span></li>
               </ul>
-              <div class="text-center"><a  href={% url 'account_login' %} class="buy-btn">Buy Now</a></div>
+              <div class="text-center"><a  href="{% url 'account_signup' %}" class="buy-btn">Buy Now</a></div>
             </div>
           </div><!-- End Pricing Item -->
 
@@ -409,7 +415,7 @@
                 <li><i class="bi bi-check"></i> <span>Family Emotional Health Repor</span></li>
                 <li><i class="bi bi-check"></i> <span>Integration with Smart Home Devices</span></li>
               </ul>
-              <div class="text-center"><a  href={% url 'account_login' %} class="buy-btn">Buy Now</a></div>
+              <div class="text-center"><a  href="{% url 'account_signup' %}" class="buy-btn">Buy Now</a></div>
             </div>
           </div><!-- End Pricing Item -->
 
@@ -771,9 +777,7 @@
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-5 col-md-12 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span>Append</span>
-          </a>
+         
           <p>
           Navigate through our footer to find quick links to all of EmoCare's services and resources, ensuring you have the support and information you need for your child's emotional development.
 
@@ -788,11 +792,11 @@
         <div class="col-lg-2 col-6 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><a href="https://docs.google.com/document/d/1lNq92vhL7G5edodVOdccIX92qdFAXVotKt-j6aBVBlE/edit?usp=sharing"> Terms and Conditions</a></li>
-            <li><a href="https://docs.google.com/document/d/1xIg_6qvezlcDF9OVH-yPA7Im9EjwunmaQLFoGb0K28c/edit?usp=sharing">Privacy Notice</a></li>
-            <li><a href="https://docs.google.com/document/d/1bQWmsSr6PDsxGFw4x4_BJ54aSx91C5Zj88oBt7fWXac/edit?usp=sharing">Acceptable Use Notice</a></li>
-            <li><a href="https://docs.google.com/document/d/14e2d23maP0zHdlucblgKmeGyCep0sX6k-UVirkvV-hI/edit?usp=sharing">Cookies Policy</a></li>
-            <li><a href="https://docs.google.com/document/d/14Ek4qm00ksH3e1yUYJTxLhGtjQIRA6LVsvZEgHIfpks/edit?usp=sharing">Accessibility</a></li>
+            <li><a href="/tos"> Terms and Conditions</a></li>
+            <li><a href="/privacy">Privacy Notice</a></li>
+            <li><a href="/aun">Acceptable Use Notice</a></li>
+            <li><a href="/cookie">Cookies Policy</a></li>
+            <li><a href="/accessibility">Accessibility</a></li>
             </ul>
         </div>
 

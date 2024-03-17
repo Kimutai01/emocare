@@ -16,12 +16,18 @@ urlpatterns = [
 	path('detect_pose/', views.detect_pose, name='detect_pose'),
 	path('dashboard/', views.Dash, name='dashboard'),
 	path('home', views.home, name='home'),
+    path('tos/', views.tos, name='tos'),
+    path('privacy/', views.privacy, name='privacy'),
+    path('aun/', views.Acceptable_Use_Notice, name='aun'),
+    path('accessibility/', views.Accessibility, name='Accessibility'),
+    path('cookie/', views.cookie, name='cookie'),
     path('create_checkout_session/', views.create_checkout_session, name='checkout'),
     path('success.html/', views.success, name='success'),
     path('cancel.html/', views.cancel, name='cancel'),
 	path('update_profile/', ProfileUpdateView.as_view(), name='update_profile'),
     path('email_history/', views.email_history, name='email_history'),
     path('stream_video_feed/', views.stream_video_feed, name='stream_video_feed'), 
+    path('stream_pose_video_feed/', views.stream_pose_video_feed, name='stream_pose_video_feed'),
     path('accounts/logout/', views.custom_logout, name='custom_logout'),
 
 
