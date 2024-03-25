@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+<!-- {% extends "base.html" %} -->
 {% block start %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -238,21 +238,33 @@
             <span>Dashboard</span>
         </a>
     </li>
-
+    
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'voice_auth' %}" >
+            <i class="fas fa-fw fa-user"></i>
+            <span>Enroll Voice</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'voice_emotion' %}" >
+            <i class="fas fa-fw fa-user"></i>
+            <span>Detect voice emotion</span>
+        </a>
+    </li>
+    
     <li class="nav-item">
         <a class="nav-link" href="{% url 'emotions:update_profile' %}" >
             <i class="fas fa-fw fa-user"></i>
             <span>My Profile</span>
         </a>
     </li>
-
+    
     <li class="nav-item">
         <a class="nav-link" href="{% url 'emotions:email_history' %}">
             <i class="fas fa-fw fa-envelope"></i>
             <span>Email History</span>
         </a>
     </li>
-
     <!-- Add more navigation items as needed -->
 
     <!-- Divider -->
@@ -355,15 +367,7 @@
 
 <body data-spy="scroll" data-target=".fixed-top">
 
-    <!-- Preloader -->
-    <div class="spinner-wrapper">
-        <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-        </div>
-    </div>
-    <!-- End of preloader -->
+
 
     <!-- Header -->
     <header id="header" class="ex-2-header">

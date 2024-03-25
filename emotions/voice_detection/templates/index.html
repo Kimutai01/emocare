@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Processing Web App</title>
+</head>
+<body>
+    <h1>Audio Processing Web App</h1>
+
+    <h2>Enrollment</h2>
+    <form action="/enroll" method="post" enctype="multipart/form-data">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br>
+        <label for="file">Upload Audio File:</label>
+        <input type="file" name="file" accept=".wav, .flac" required><br>
+        <input type="submit" value="Enroll">
+    </form>
+
+    <h2>Recognition</h2>
+    <form action="/recognize" method="post" enctype="multipart/form-data">
+        <label for="file">Upload Audio File:</label>
+        <input type="file" name="file" accept=".wav, .flac" required><br>
+        <input type="submit" value="Recognize">
+    </form>
+     <h2>Result</h2>
+    {% if result %}
+        <p>{{ result }}</p>
+    {% endif %}
+</body>
+</html>

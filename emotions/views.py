@@ -219,13 +219,15 @@ def detect_face_emotion(request):
     # Prepare email content
     html_content = render_to_string("email.html", {'emotions': detected_face_emotion})
     body = strip_tags(html_content)
+    
+    user_email = current_user.email
 
     # Send email
     message = EmailMultiAlternatives(
         "Emocare",
         body,
         '',
-        mail_list,
+        [user_email],
     )
     message.attach_alternative(html_content, "text/html")
     message.send(fail_silently=False)
@@ -442,6 +444,7 @@ def stream_pose_video_feed(request):
             else:
                 camera.release()
                 break
+
     def generate_frames_with_pose():
         success, frame = camera.read()
         if success:
@@ -481,6 +484,30 @@ def stream_pose_video_feed(request):
 
     return StreamingHttpResponse(generate_frames_with_pose(), content_type='multipart/x-mixed-replace; boundary=frame')
 
+
+
+def camera_view(request):
+    # Open the camera
+    cap = cv2.VideoCapture(0)
+
+    # Check if the camera is opened successfully
+    if not cap.isOpened():
+        raise Exception("Could not open camera")
+
+    while True:
+        # Read the current frame
+        ret, frame = cap.read()
+
+        # Convert the frame to JPEG format
+        ret, jpeg = cv2.imencode('.jpg', frame)
+
+        # Render the frame in the template
+        context = {'frame': jpeg.tobytes()}
+        return render(request, 'pose.html', context)
+
+    # Release the camera
+    # cap.release()
+
 @login_required
 def email_history(request):
     
@@ -489,14 +516,15 @@ def email_history(request):
 
 @login_required
 def Dash(request):
-    latest_emotions = Emotion.objects.last()
-    all_emotions = Emotion.objects.all()
+    # Assuming Emotion model has a foreign key field 'kid' to associate each emotion with a user
+    latest_emotion = Emotion.objects.filter(kid=request.user).last()
+    all_emotions = Emotion.objects.filter(kid=request.user)
 
-    latest_pose = Pose.objects.last()
-    all_poses = Pose.objects.all()
+    latest_pose = Pose.objects.filter(kid=request.user).last()
+    all_poses = Pose.objects.filter(kid=request.user)
 
     context = {
-        'latest_emotions': latest_emotions,
+        'latest_emotion': latest_emotion,
         'all_emotions': all_emotions,
         'latest_pose': latest_pose,
         'all_poses': all_poses,
@@ -521,3 +549,70 @@ def email_history(request):
 def custom_logout(request):
     logout(request)
     return redirect('/')
+
+
+from emotions.voice_detection.voice_auth import enroll, recognize
+
+
+def voice_auth(request):
+    return render(request, 'voice_detect.html')
+
+def enroll_route(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        uploaded_file = request.FILES.get('file')
+        if name and uploaded_file:
+            temp_path = 'temp_upload.wav'
+            with open(temp_path, 'wb') as f:
+                for chunk in uploaded_file.chunks():
+                    f.write(chunk)
+            result = enroll(name, temp_path)
+            return render(request, 'voice_detect.html', {'result': result})
+        else:
+            return render(request, 'voice_detect.html', {'error': 'Name and file are required for enrollment.'})
+    else:
+        return render(request, 'voice_detect.html')
+
+def recognize_route(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES.get('file')
+        if uploaded_file:
+            temp_path = 'temp_upload.wav'
+            with open(temp_path, 'wb') as f:
+                for chunk in uploaded_file.chunks():
+                    f.write(chunk)
+            result = recognize(temp_path)
+            print("this is the result",result)
+            return render(request, 'voice_detect.html', {'result': result})
+        else:
+            return render(request, 'voice_detect.html', {'error': 'File is required for recognition.'})
+    else:
+        return render(request, 'voice_detect.html')
+    
+from voice_emotion_detection.main import record_audio, classify_emotion
+def voice_emotion(request):
+    return render(request, 'voice_emotion.html')
+
+def classify(request):
+    if request.method == 'POST':
+        try:
+            # Record audio
+            audio_data = record_audio()
+
+            # Save audio to a temporary file
+            temp_wav_path = 'temp.wav'
+            with open(temp_wav_path, 'wb') as f:
+                f.write(audio_data)
+
+            # Classify emotion
+            emotion_label = classify_emotion(audio_data, temp_wav_path)
+            print(emotion_label)
+
+            # Render a template with the emotion label
+            return render(request, 'voice_emotion.html', {'emotion_label': emotion_label})
+        except Exception as e:
+            # If any error occurs, redirect to the voice_emotion page with an error message
+            return render(request, 'voice_emotion.html', {'emotion_label': str(e)})
+    else:
+        # If the request method is not POST, redirect to the voice_emotion page
+        return render(request, 'voice_emotion.html', {'emotion_label': str(e)})

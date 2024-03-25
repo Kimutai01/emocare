@@ -55,10 +55,11 @@ SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_URL = "account/login"
-SIGNUP_REDIRECT_URL = "/account/login/"
+SIGNUP_REDIRECT_URL = "account/login"
 LOGIN_REDIRECT_URL = "/home"
 LOGOUT_URL = "account/logout"
 LOGOUT_REDIRECT_URL = "/"
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = "email"

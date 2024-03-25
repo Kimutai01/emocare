@@ -93,13 +93,14 @@
         </ul>
 
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        
       </nav><!-- End Nav Menu -->
       {% if user.is_authenticated  %}
       <a class="btn-getstarted" href={% url 'emotions:dashboard' %}>Sign In</a>
       {% else %}
       <a class="btn-getstarted" href={% url 'account_login' %}>Sign Up</a>
       {% endif %}
-
+      
     </div>
   </header><!-- End Header -->
   <main id="main">
@@ -121,7 +122,7 @@
 
                 <a href={% url "emotions:dashboard" %} class="btn  btn-lg text-white" style="background-color: #e84545;" data-aos="fade-up" data-aos-delay="300">Get Started</a>
       {% else %}
-      <a href={% url "account_login" %} class="btn  btn-lg text-white" style="background-color: #e84545;" data-aos="fade-up" data-aos-delay="300">Sign In</a>
+      <a href={% url "account_signup" %} class="btn  btn-lg text-white" style="background-color: #e84545;" data-aos="fade-up" data-aos-delay="300">Get Started</a>
       {% endif %}
 
             </div>

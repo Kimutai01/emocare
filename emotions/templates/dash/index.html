@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+<!-- {% extends "base.html" %} -->
 {% load static %}
 {% block start  %}
 <!DOCTYPE html>
@@ -87,26 +87,38 @@
 
     <!-- Navigation Items -->
     <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="/dashboard">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
-
+    
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'voice_auth' %}" >
+            <i class="fas fa-fw fa-user"></i>
+            <span>Enroll Voice</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'voice_emotion' %}" >
+            <i class="fas fa-fw fa-user"></i>
+            <span>Detect voice emotion</span>
+        </a>
+    </li>
+    
     <li class="nav-item">
         <a class="nav-link" href="{% url 'emotions:update_profile' %}" >
             <i class="fas fa-fw fa-user"></i>
             <span>My Profile</span>
         </a>
     </li>
-
+    
     <li class="nav-item">
         <a class="nav-link" href="{% url 'emotions:email_history' %}">
             <i class="fas fa-fw fa-envelope"></i>
             <span>Email History</span>
         </a>
     </li>
-
     <!-- Add more navigation items as needed -->
 
     <!-- Divider -->
@@ -266,7 +278,7 @@
                             </div>
                         </div>
                         <!-- Earnings (Voice) Card Example -->
-                        <!-- <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -284,7 +296,7 @@
                                                 </div>
                                                 {% endif %}
                                                 <div class="col-auto">
-                                                        <a href="/dashboard" class=" btn btn-sm btn-success shadow-sm">
+                                                        <a href="/voice_auth" class=" btn btn-sm btn-success shadow-sm">
                                                         <i
                                                         class=" text-white-50"></i> Detect Voice
                                                     </a>
@@ -297,7 +309,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- Earnings (Pose) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
@@ -491,7 +503,7 @@
             <footer class="sticky-footer ">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        <span>Copyright &copy; Your Website 2024</span>
                     </div>
                 </div>
             </footer>

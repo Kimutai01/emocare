@@ -22,7 +22,7 @@
                 color: #fff;
             }
             .ex-2-header .form-container {
-                max-width: 800px;
+                max-width: 500px;
                 margin-right: auto;
                 margin-left: auto;
                 padding: 2.25rem 1.25rem 1.25rem 1.25rem;
@@ -65,7 +65,11 @@
                 height: 100%;
                 border-radius: 50%;
                 background-color: #e84545;
-                opacity: 0.6;
+                opacity: 0.6;.container{
+                max-width: 500px;
+
+                
+            }
                 position: absolute;
                 top: 0;
             }
@@ -155,15 +159,7 @@
 
 <body data-spy="scroll" data-target=".fixed-top">
     
-    <!-- Preloader -->
-	<div class="spinner-wrapper">
-        <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-        </div>
-    </div>
-    <!-- end of preloader -->
+   
     
 
     <!-- Navigation -->
@@ -179,16 +175,7 @@
             {% block messages %}
             {% if messages %}
             <div>
-                <ul>
-                {% for message in messages %}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>{{message}}</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                {% endfor %}
-                </ul>
+               
             </div>
             {% endif %}
             {% endblock %}
@@ -206,7 +193,7 @@
                     </li>
                 </ul>
                 <span class="nav-item">
-                    <a class="btn-outline-sm" href="{% url 'account_login' %}" >SignUp</a>
+                    <a class="btn-outline-sm" href="{% url 'account_login' %}" >Login</a>
                 </span>
             </div>
         </div> <!-- end of container -->
@@ -214,41 +201,39 @@
     <!-- end of navigation -->
 
 
-    <!-- Header -->
-    <header id="header" class="ex-2-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Sign Up</h1>
-                   <p>You don't have an account? Sign Up below</p> 
-                    <!-- Sign Up Form -->
-                    <div class="form-container">
-                        <form class="row g-3" id="login_form" method="post" action="{% url 'account_signup' %}">
+  <section class="signup-section" style="margin-top: 100px;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card shadow-lg">
+          <div class="card-body">
+            <h2 class="card-title text-center">Sign Up</h2>
+            <p class="card-text text-center">Don't have an account? Sign up below.</p>
+            <div class="form-container">
+                <form class="row g-3" id="login_form" method="post" action="{% url 'account_signup' %}">
 
-                            {% csrf_token %}
-        
-                            <div class="col-12">
-                              {{ form|crispy }}
-                              <div class="invalid-feedback">Please enter a valid Email adddress!</div>
-                            </div>
-        
-                          
-                            <div class="col-12">
-                              <button class="btn btn-primary w-100" type="submit">SignUp</button>
-                            </div>
-                            <div class="col-12">
-                              <p class="small mb-0">Already have an account? <a href="{% url 'account_login' %}">Login</a></p>
-                            </div>
-                          </form>
-                    </div> <!-- end of form container -->
-                    <!-- end of sign up form -->
+                    {% csrf_token %}
 
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </header> <!-- end of ex-header -->
-    <!-- end of header -->
+                    <div class="col-12">
+                      {{ form|crispy }}
+                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                    </div>
 
+                  
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="submit">SignUp</button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Already have an account? <a href="{% url 'account_login' %}">Login</a></p>
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 </body>
 </html>

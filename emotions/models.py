@@ -7,6 +7,12 @@ from django.shortcuts import reverse
 from PIL import Image
 from django.utils.text import slugify
 
+
+from django.db import models
+from .models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -85,9 +91,22 @@ class PaymentHistory(models.Model):
         return self.product.name
 
 class EmailHist(models.Model):
+     kid = models.ForeignKey(User, on_delete=models.CASCADE)
      timestamp = models.DateTimeField(auto_now_add=True)
      title = models.CharField(max_length=100, null=True)
 
 
      def __str__(self):
          return self.title
+     
+
+class UserPayment(models.Model):
+	kid = models.ForeignKey(User, on_delete=models.CASCADE)
+	payment_bool = models.BooleanField(default=False)
+	stripe_checkout_id = models.CharField(max_length=500)
+
+
+@receiver(post_save, sender=User)
+def create_user_payment(sender, instance, created, **kwargs):
+	if created:
+		UserPayment.objects.create(kid=instance)

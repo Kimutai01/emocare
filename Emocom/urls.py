@@ -16,9 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from emotions import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('emotions.urls')),
     path('accounts/', include('allauth.urls')),
+    
+    path('voice_auth/', views.voice_auth, name='voice_auth'),
+    path('enroll/', views.enroll_route, name='enroll'),
+    path('recognize/', views.recognize_route, name='recognize'),
+
+    path('voice_emotion/', views.voice_emotion, name='voice_emotion'),
+    path('detect_voice_emotion/', views.classify, name= 'detect_voice_emotion' ),
+
+
 ]

@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from emotions import views
 from . views import (Home,Dash,create_checkout_session,
 	success,cancel,home,detect_face_emotion,detect_voice,
-	detect_pose,ProfileUpdateView, email_history)
+	detect_pose,ProfileUpdateView, email_history , camera_view)
 
 app_name = 'emotions'
 
@@ -25,10 +25,19 @@ urlpatterns = [
     path('success.html/', views.success, name='success'),
     path('cancel.html/', views.cancel, name='cancel'),
 	path('update_profile/', ProfileUpdateView.as_view(), name='update_profile'),
+    path('accounts/logout/', views.custom_logout, name='custom_logout'),
+    
     path('email_history/', views.email_history, name='email_history'),
     path('stream_video_feed/', views.stream_video_feed, name='stream_video_feed'), 
     path('stream_pose_video_feed/', views.stream_pose_video_feed, name='stream_pose_video_feed'),
-    path('accounts/logout/', views.custom_logout, name='custom_logout'),
+    path('camera_feed/', camera_view, name='camera_feed'),
+
+    path('voice_emotion/', views.voice_emotion, name='voice_emotion'),
+    path('detect_voice_emotion/', views.classify, name='detect_voice_emotion'),
+
+    path('voice_auth/', views.voice_auth, name='voice_auth'),
+    path('enroll/', views.enroll_route, name='enroll'),
+    path('recognize/', views.recognize_route, name='recognize'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
