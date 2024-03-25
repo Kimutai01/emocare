@@ -89,7 +89,11 @@ conda activate emocare
 cd emocare
 
 #run on server
+python manage.py makemigrations
+ python manage.py migrate
 python manage.py runserver 8000
+python manage.py runserver 161.97.115.252:8000
+
 
 
 #kill terminal(optional)
