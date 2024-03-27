@@ -1,3 +1,4 @@
 voice_emotion_detection/wav2vec2_checkpoints/models--facebook--wav2vec2-base/blobs/3f24dc078fcba55ee1d417a413847ead40c093a3 filter=lfs diff=lfs merge=lfs -text
 voice_emotion_detection/wav2vec2_checkpoints/models--facebook--wav2vec2-base/blobs/47d7dc533f6d412e1c021eb181615d006e403bed filter=lfs diff=lfs merge=lfs -text
 voice_emotion_detection/wav2vec2_checkpoints/models--facebook--wav2vec2-base/blobs/3249fe98bfc62fcbc26067f724716a6ec49d12c4728a2af1df659013905dff21 filter=lfs diff=lfs merge=lfs -text
+voice_emotion_detection filter=lfs diff=lfs merge=lfs -text

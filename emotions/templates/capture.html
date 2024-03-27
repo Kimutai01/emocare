@@ -1,0 +1,113 @@
+<!-- capture_video.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Capture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #videoElement {
+            width: 640px;
+            height: 480px;
+            margin-bottom: 20px;
+        }
+        #startButton, #stopButton, #uploadButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Capture</h1>
+    <video id="videoElement" autoplay></video>
+    <button id="startButton">Start Capture</button>
+    <button id="stopButton" style="display: none;">Stop Capture</button>
+    <button id="uploadButton" style="display: none;">Upload Frame</button>
+    <canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
+
+    <script>
+        const video = document.getElementById('videoElement');
+        const canvas = document.getElementById('canvasElement');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const uploadButton = document.getElementById('uploadButton');
+
+        let stream;
+        let mediaRecorder;
+
+        startButton.onclick = function() {
+            startCapture();
+        };
+
+        stopButton.onclick = function() {
+            stopCapture();
+        };
+
+        uploadButton.onclick = function() {
+            uploadFrame();
+        };
+
+        function startCapture() {
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (s) {
+                        stream = s;
+                        video.srcObject = stream;
+                        startButton.style.display = 'none';
+                        stopButton.style.display = 'inline-block';
+                        uploadButton.style.display = 'inline-block';
+                    })
+                    .catch(function (error) {
+                        console.log("Something went wrong!");
+                    });
+            }
+        }
+
+        function stopCapture() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+            startButton.style.display = 'inline-block';
+            stopButton.style.display = 'none';
+            uploadButton.style.display = 'none';
+        }
+
+        function uploadFrame() {
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function(blob) {
+                const formData = new FormData();
+                formData.append('frame', blob, 'frame.png');
+
+                fetch('/upload-frame/', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log(data); // Handle response from the server
+                })
+                .catch(error => {
+                    console.error('Error during upload:', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
