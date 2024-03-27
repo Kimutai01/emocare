@@ -39,5 +39,7 @@ urlpatterns = [
     path('enroll/', views.enroll_route, name='enroll'),
     path('recognize/', views.recognize_route, name='recognize'),
 
+    path('webcam/', views.webcam, name='webcam'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

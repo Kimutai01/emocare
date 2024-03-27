@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'emotions',
+    'chat',
     'crispy_forms',
     'crispy_bootstrap5',
     # 'face_recognition',
@@ -55,8 +56,8 @@ SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_URL = "account/login"
-SIGNUP_REDIRECT_URL = "account/login"
-LOGIN_REDIRECT_URL = "/home"
+SIGNUP_REDIRECT_URL = "/home"
+LOGIN_REDIRECT_URL = "/dashboard"
 LOGOUT_URL = "account/logout"
 LOGOUT_REDIRECT_URL = "/"
 

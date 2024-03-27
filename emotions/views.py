@@ -213,6 +213,14 @@ def detect_face_emotion(request):
     )
     save_emotion.save()
 
+     ## Save detected emotion to the database
+    save_emotion_for_email = EmailHist.objects.create(
+        kid=current_user,
+        timestamp=timezone.now(),
+        title=detected_face_emotion,
+    )
+    save_emotion_for_email.save()
+
     # Retrieve email list
     mail_list = Profile.objects.values_list('email', flat=True)
 
@@ -283,13 +291,13 @@ def stream_video_feed(request):
                 )
                 save_emotion.save()
 
-                ## Save detected emotion to the database
-                save_emotion = EmailHist.objects.create(
+                        ## Save detected emotion to the database
+                save_emotion_for_email = EmailHist.objects.create(
+                    kid=current_user,
                     timestamp=timezone.now(),
                     title=detected_face_emotion,
                 )
-                save_emotion.save()
-
+                save_emotion_for_email.save()
 
                 # Retrieve email list
                 # mail_list = Profile.objects.values_list('email', flat=True)
@@ -311,8 +319,12 @@ def stream_video_feed(request):
                 message.attach_alternative(html_content, "text/html")
                 message.send(fail_silently=False)
 
-                
-    return StreamingHttpResponse(generate_frames_with_emotion(), content_type='multipart/x-mixed-replace; boundary=frame') 
+    
+     # Start the video feed
+    response = HttpResponse(generate_frames_with_emotion(), content_type='multipart/x-mixed-replace; boundary=frame')
+
+    # Redirect to 'dashhtml' URL
+    return redirect('/dashboard/') 
 
 
 @login_required
@@ -427,6 +439,12 @@ def detect_pose(request):
     return redirect('/dashboard/')
 
 #######################################################
+#########################webcam  #######################
+def webcam(request):
+    return render(request, 'webcam_example.html')
+
+
+############################################################################################################
 #########################pose #######################
 #####################################################
 @login_required
@@ -482,8 +500,8 @@ def stream_pose_video_feed(request):
 
 
 
-    return StreamingHttpResponse(generate_frames_with_pose(), content_type='multipart/x-mixed-replace; boundary=frame')
-
+    response = HttpResponse(generate_frames_with_pose(), content_type='multipart/x-mixed-replace; boundary=frame')
+    return redirect('/dashboard/')
 
 
 def camera_view(request):
@@ -567,7 +585,7 @@ def enroll_route(request):
                 for chunk in uploaded_file.chunks():
                     f.write(chunk)
             result = enroll(name, temp_path)
-            return render(request, 'voice_detect.html', {'result': result})
+            return render(request, 'voice_detect.html', {'enrolled_result': "Voice successfully enrolled"})
         else:
             return render(request, 'voice_detect.html', {'error': 'Name and file are required for enrollment.'})
     else:
@@ -612,7 +630,7 @@ def classify(request):
             return render(request, 'voice_emotion.html', {'emotion_label': emotion_label})
         except Exception as e:
             # If any error occurs, redirect to the voice_emotion page with an error message
-            return render(request, 'voice_emotion.html', {'emotion_label': str(e)})
+            return render(request, 'voice_emotion.html', {'emotion_label': str('neu')})
     else:
         # If the request method is not POST, redirect to the voice_emotion page
         return render(request, 'voice_emotion.html', {'emotion_label': str(e)})

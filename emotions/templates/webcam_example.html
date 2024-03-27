@@ -1,20 +1,39 @@
-<!-- webcam_example.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam Example</title>
+    <title>Streaming Video</title>
 </head>
 <body>
-    <h1>Webcam Example</h1>
+    <button id="toggleButton">Toggle Stream</button>
+    <div id="videoContainer">
+        <img id="stream" src="" alt="stream_video_feed" />
+    </div>
+    <script>
+        var button = document.getElementById('toggleButton');
+        var stream = document.getElementById('stream_video_feed');
+        var streaming = false;
 
-    <video id="videoElement" autoplay></video>
+        button.addEventListener('click', function() {
+            if (streaming) {
+                stream.src = '';
+                streaming = false;
+            } else {
+                // Start the stream
+                startStream();
+                streaming = true;
+            }
+        });
 
-<script>
-    var video = document.getElementById('videoElement');
-    video.src = "{% url 'stream_video_feed' %}";
-</script>
-
+        function startStream() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/stream_video_feed/', true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    stream.src = '/stream_video_feed/';
+                }
+            };
+        }
+    </script>
 </body>
 </html>

@@ -275,29 +275,55 @@
                 <!-- End of Topbar -->
               
                 </head>
-                <body>
                 
-                    <header>
-                        <h1>Email History Page</h1>
-                    </header>
-                
-                    <main>
-                        {% for email in emails|dictsortreversed:"timestamp" %}
-                        <section>
-                            <p><strong>{{ email.title }}</strong> - Emotion at {{ email.timestamp|date:"F d, Y H:i" }}</p>
-                        </section>
-                        {% endfor %}
-                    </main>
-                
-                    <footer>
-                        <p>&copy; 2024 Email History Page. All rights reserved.</p>
-                    </footer>
-                
+<div class="container">
 
-</body>
+  <style>
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+    background-color: #45a049;
+    }
+
+    /* div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    } */
+    </style>
+
+  <form id="post-form" method="POST" action="{% url 'checkview' %}" asdfsf>
+      {% csrf_token %}
+      <label>Community Room Name</label>
+      <!-- <input type="text" name="room_name" id="room_name" width="100px" /> -->
+      <input type="text" name="room_name" id="room_name" value="Community Chat" style="width: 100%;">
+      <p></p>
+      <label>Username</label>
+      <input type="text" name="username" id="username" width="100px" />
+      <input type="submit" value="Enter Room">
+  </form>
+</div>
+
 
 </html>
 {% endblock %}
-
-
 

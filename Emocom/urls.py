@@ -17,10 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from emotions import views
+from chat import views_chat
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('emotions.urls')),
+    path('chat/', include('chat.urls')),
     path('accounts/', include('allauth.urls')),
     
     path('voice_auth/', views.voice_auth, name='voice_auth'),
@@ -29,6 +31,13 @@ urlpatterns = [
 
     path('voice_emotion/', views.voice_emotion, name='voice_emotion'),
     path('detect_voice_emotion/', views.classify, name= 'detect_voice_emotion' ),
+
+
+    path('home_room/',views_chat.home , name='home_room'),
+    path('<str:room>/', views_chat.room, name='room'),
+    path('checkview', views_chat.checkview, name='checkview'),
+    path('send', views_chat.send, name='send'),
+    path('getMessages/<str:room>/', views_chat.getMessages, name='getMessages'),
 
 
 ]

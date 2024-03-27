@@ -120,6 +120,13 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link"href ="{% url 'home_room' %}">
+            <i class="fas fa-fw fa-envelope"></i>
+            <span>Community chat</span>
+        </a>
+    </li>
+
     <!-- Add more navigation items as needed -->
 
     <!-- Divider -->
@@ -249,6 +256,11 @@
                         </div>
                         <button type="submit" class="btn btn-success">Enroll Voice</button>
                     </form>
+                    <div>
+                    {% if enrolled_result %}
+                    <p>{{ enrolled_result }}</p>
+                    {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

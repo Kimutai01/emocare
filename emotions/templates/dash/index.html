@@ -119,6 +119,13 @@
             <span>Email History</span>
         </a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link"href ="{% url 'home_room' %}">
+            <i class="fas fa-fw fa-envelope"></i>
+            <span>Community chat</span>
+        </a>
+    </li>
     <!-- Add more navigation items as needed -->
 
     <!-- Divider -->
@@ -254,9 +261,9 @@
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Current Face Emotion
                                             </div>
                                             <div class="row no-gutters align-items-center">
-                                                {% if latest_emotions %}
+                                                {% if latest_emotion %}
                                                 <diface_emotionv class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ latest_emotions.face_emotion }}</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ latest_emotion.face_emotion }}</div>
                                                 </diface_emotionv>
                                                 {% else %}
                                                 <div class="col-auto">
@@ -292,7 +299,7 @@
                                                 </div>
                                                 {% else %}
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">No Recent Emotion</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Voice Enroll</div>
                                                 </div>
                                                 {% endif %}
                                                 <div class="col-auto">
