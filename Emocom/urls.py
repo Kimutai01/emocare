@@ -41,4 +41,4 @@ urlpatterns = i18n_patterns(
     path('getMessages/<str:room>/', views_chat.getMessages, name='getMessages'),
 
 
-)v
+)
