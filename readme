@@ -24,8 +24,8 @@ pip install PyAudio
 sudo apt-get install gettext
 
 # ls
-# sudo apt-get update
-# sudo apt-get install libgl1-mesa-glx
+sudo apt-get update
+sudo apt-get install libgl1-mesa-glx
 
 
 # install git
@@ -83,6 +83,7 @@ sudo ufw enable
 sudo ufw status
 sudo ufw delete allow port
 sudo ufw allow 8000
+sudo ufw allow 22
 
 #start tmux session
 tmux new -s emocare
@@ -93,7 +94,7 @@ cd emocare
 #run on server
 python manage.py makemigrations
  python manage.py migrate
-python manage.py runserver 8000
+# python manage.py runserver 8000
 python manage.py runserver 161.97.115.252:8000
 
 
