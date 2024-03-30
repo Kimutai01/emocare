@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from chat.models import Room, Message
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 def home(request):
@@ -9,12 +8,7 @@ def home(request):
 
 def room(request, room):
     username = request.GET.get('username')
-    
-    try:
-        room_details = Room.objects.get(name=room)
-    except Room.DoesNotExist:
-        room_details = None  # Or handle this case as appropriate
-    
+    room_details = Room.objects.get(name=room)
     return render(request, 'room.html', {
         'username': username,
         'room': room,
